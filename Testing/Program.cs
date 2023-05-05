@@ -12,10 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IDbConnection>((s) =>
 {
-    IDbConnection conn = new MySqlConnection(builder.Configuration.GetConnectionString("bestbuy"));
+    var configuration = s.GetService<IConfiguration>();
+    var dbPassword = configuration["DbPassword"];
+    IDbConnection conn = new MySqlConnection(configuration.GetConnectionString("bestbuy").Replace("__DbPassword__", dbPassword));
     conn.Open();
     return conn;
 });
+
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
