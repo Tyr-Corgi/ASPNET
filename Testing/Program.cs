@@ -10,11 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddScoped<IDbConnection>((s) =>
 {
-    var configuration = s.GetService<IConfiguration>();
-    var dbPassword = configuration["DbPassword"];
-    IDbConnection conn = new MySqlConnection(configuration.GetConnectionString("bestbuy").Replace("__DbPassword__", dbPassword));
+    IDbConnection conn = new MySqlConnection(builder.Configuration.GetConnectionString("bestbuy"));
     conn.Open();
     return conn;
 });
