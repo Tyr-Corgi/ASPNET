@@ -1,5 +1,4 @@
-﻿using System;
-namespace Testing.Models
+﻿namespace Testing.Models
 {
     public class Category
     {
