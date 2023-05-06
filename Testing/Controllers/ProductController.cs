@@ -1,48 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Testing.Models;
 
-// For More information on enabling MVC for empty
 namespace Testing.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IProductRepository repo;
 
-        //Constructor
         public ProductController(IProductRepository repo)
         {
             this.repo = repo;
         }
-
-        // GET: /<controller>/
         public IActionResult Index()
         {
             var products = repo.GetAllProducts();
             return View(products);
         }
 
-        public IActionResult InsertProduct()
+        public IActionResult ViewProduct(int id)
         {
-            var prod = repo.AssignCategory();
-            return View(prod);
+            var product = repo.GetProduct(id);
+            return View(product);
         }
-
-        public IActionResult InsertProductToDatabase(Product productToInsert)
-        {
-            repo.InsertProduct(productToInsert);
-            return RedirectToAction("Index");
-        }
-
-        public IActionResult DeleteProduct(Product product)
-        {
-            repo.DeleteProduct(product);
-            return RedirectToAction("Index");
-        }
-
         public IActionResult UpdateProduct(int id)
         {
             Product prod = repo.GetProduct(id);
@@ -52,20 +31,26 @@ namespace Testing.Controllers
             }
             return View(prod);
         }
-
         public IActionResult UpdateProductToDatabase(Product product)
         {
             repo.UpdateProduct(product);
 
             return RedirectToAction("ViewProduct", new { id = product.ProductID });
         }
-
-        public IActionResult ViewProduct(int id)
+        public IActionResult InsertProduct()
         {
-            var product = repo.GetProduct(id);
-
-            return View(product);
+            var prod = repo.AssignCategory();
+            return View(prod);
         }
-              
+        public IActionResult InsertProductToDatabase(Product productToInsert)
+        {
+            repo.InsertProduct(productToInsert);
+            return RedirectToAction("Index");
+        }
+        public IActionResult DeleteProduct(Product product)
+        {
+            repo.DeleteProduct(product);
+            return RedirectToAction("Index");
+        }
     }
 }
